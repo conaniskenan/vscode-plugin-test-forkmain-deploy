@@ -1,0 +1,48 @@
+vscode-plugin-test:
+  env:
+  - name: ENV_NAME
+    value: main
+  - name: ENV_DOMAIN
+    value: vscode-plugin-test-ipm35ph7u.forkmain.cloud
+  fullnameOverride: vscode-plugin-test
+  image:
+    repository: ghcr.io/conaniskenan/webpack5
+    tag: main
+  imagePullSecrets:
+  - name: vscode-plugin-test-docker
+  ingress:
+    className: nginx
+    enabled: true
+    hosts:
+    - host: vscode-plugin-test-ipm35ph7u.forkmain.cloud
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+  nocalhost:
+    command:
+      debug:
+      - yarn
+      - install
+      - '&&'
+      - yarn
+      - dev
+      run:
+      - yarn
+      - install
+      - '&&'
+      - yarn
+      - dev
+    configPath: conf/nocalhost.yaml
+    env: null
+    gitURL: https://github.com/conaniskenan/webpack5.git
+    hotReload: false
+    image: nocalhost-docker.pkg.coding.net/nocalhost/dev-images/node:latest
+    language: javascript
+    patches: null
+    persistentVolumeDirs:
+    - capacity: 20Gi
+      path: /home/nocalhost-dev
+    remoteDebugPort: 9009
+  service:
+    port: 3000
+    targetPort: 3000
